@@ -358,7 +358,7 @@ class InstructionDecode extends Module {
   // TODO: Complete J-type immediate extension
   val immJ = Cat(
     Fill(Parameters.DataBits - 21, instruction(31)),  // Sign extension
-    instruction(30),                                  // bit [20]
+    instruction(31),                                  // bit [20]
     instruction(19, 12),                              // bits [19:12]
     instruction(20),                                  // bit [11]
     instruction(30, 21),                              // bits [10:1]
