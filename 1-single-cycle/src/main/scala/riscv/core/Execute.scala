@@ -91,12 +91,12 @@ class Execute extends Module {
     Seq(
       // TODO: Implement six branch conditions
       // Hint: Compare two register data values based on branch type
-      InstructionsTypeB.beq  -> (io.reg1_data === io.reg2_data),
-      InstructionsTypeB.bne  -> (io.reg1_data =/= io.reg2_data),
+      InstructionsTypeB.beq -> (io.reg1_data === io.reg2_data),
+      InstructionsTypeB.bne -> (io.reg1_data =/= io.reg2_data),
 
       // Signed comparison (need conversion to signed type)
-      InstructionsTypeB.blt  -> (io.reg1_data.asSInt < io.reg2_data.asSInt),
-      InstructionsTypeB.bge  -> (io.reg1_data.asSInt >= io.reg2_data.asSInt),
+      InstructionsTypeB.blt -> (io.reg1_data.asSInt < io.reg2_data.asSInt),
+      InstructionsTypeB.bge -> (io.reg1_data.asSInt >= io.reg2_data.asSInt),
 
       // Unsigned comparison
       InstructionsTypeB.bltu -> (io.reg1_data < io.reg2_data),
@@ -120,16 +120,16 @@ class Execute extends Module {
   // TODO: Complete the following address calculations
   val branchTarget = io.instruction_address + io.immediate
 
-  val jalTarget    = branchTarget  // JAL and Branch use same calculation method
+  val jalTarget = branchTarget // JAL and Branch use same calculation method
 
   // JALR address calculation:
   //   1. Add register value and immediate
   //   2. Clear LSB (2-byte alignment)
-  val jalrSum      = io.reg1_data + io.immediate
+  val jalrSum = io.reg1_data + io.immediate
 
   // TODO: Clear LSB using bit concatenation
   // Hint: Extract upper bits and append zero
-  val jalrTarget   = Cat(jalrSum(31, 1), 0.U(1.W))
+  val jalrTarget = Cat(jalrSum(31, 1), 0.U(1.W))
 
   val branchTaken = isBranch && branchCondition
   io.if_jump_flag := branchTaken || isJal || isJalr

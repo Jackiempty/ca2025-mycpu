@@ -119,29 +119,29 @@ class MemoryAccess extends Module {
         InstructionsTypeL.lw -> data
       )
     )
-  // ============================================================
-  // [CA25: Exercise 13] Store Data Alignment - Byte Strobes and Shifting
-  // ============================================================
-  // Hint: Implement proper data alignment and byte strobes for store operations
-  //
-  // RISC-V Store instruction types:
-  // - SB (Store Byte): Write 8-bit value to memory at byte-aligned address
-  // - SH (Store Halfword): Write 16-bit value to memory at halfword-aligned address
-  // - SW (Store Word): Write 32-bit value to memory at word-aligned address
-  //
-  // Key concepts:
-  // 1. Byte strobes: Control which bytes in a 32-bit word are written
-  //    - SB: 1 strobe active (at mem_address_index position)
-  //    - SH: 2 strobes active (based on address bit 1)
-  //    - SW: All 4 strobes active
-  // 2. Data shifting: Align data to correct byte position in 32-bit word
-  //    - mem_address_index (bits 1:0) indicates byte position
-  //    - Left shift by (mem_address_index * 8) bits for byte operations
-  //    - Left shift by 16 bits for upper halfword
-  //
-  // Examples:
-  // - SB to address 0x1002 (index=2): data[7:0] → byte 2, strobe[2]=1
-  // - SH to address 0x1002 (index=2): data[15:0] → bytes 2-3, strobes[2:3]=1
+    // ============================================================
+    // [CA25: Exercise 13] Store Data Alignment - Byte Strobes and Shifting
+    // ============================================================
+    // Hint: Implement proper data alignment and byte strobes for store operations
+    //
+    // RISC-V Store instruction types:
+    // - SB (Store Byte): Write 8-bit value to memory at byte-aligned address
+    // - SH (Store Halfword): Write 16-bit value to memory at halfword-aligned address
+    // - SW (Store Word): Write 32-bit value to memory at word-aligned address
+    //
+    // Key concepts:
+    // 1. Byte strobes: Control which bytes in a 32-bit word are written
+    //    - SB: 1 strobe active (at mem_address_index position)
+    //    - SH: 2 strobes active (based on address bit 1)
+    //    - SW: All 4 strobes active
+    // 2. Data shifting: Align data to correct byte position in 32-bit word
+    //    - mem_address_index (bits 1:0) indicates byte position
+    //    - Left shift by (mem_address_index * 8) bits for byte operations
+    //    - Left shift by 16 bits for upper halfword
+    //
+    // Examples:
+    // - SB to address 0x1002 (index=2): data[7:0] → byte 2, strobe[2]=1
+    // - SH to address 0x1002 (index=2): data[15:0] → bytes 2-3, strobes[2:3]=1
   }.elsewhen(io.memory_write_enable) {
     io.memory_bundle.write_data   := io.reg2_data
     io.memory_bundle.write_enable := true.B
@@ -155,7 +155,7 @@ class MemoryAccess extends Module {
       // 1. Enable single byte strobe at appropriate position
       // 2. Shift byte data to correct position based on address
       io.memory_bundle.write_strobe(mem_address_index) := true.B
-      io.memory_bundle.write_data := io.reg2_data(7, 0) << (mem_address_index << 3)
+      io.memory_bundle.write_data                      := io.reg2_data(7, 0) << (mem_address_index << 3)
 
     }.elsewhen(io.funct3 === InstructionsTypeS.sh) {
       // TODO: Complete store halfword logic

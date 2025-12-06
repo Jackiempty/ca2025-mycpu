@@ -59,13 +59,13 @@ class Top extends Module {
   )
 
   // VGA peripheral connections
-  vga.io.pixClock            := io.vga_pixclk
-  io.vga_hsync               := vga.io.hsync
-  io.vga_vsync               := vga.io.vsync
-  io.vga_rrggbb              := vga.io.rrggbb
-  io.vga_activevideo         := vga.io.activevideo
-  io.vga_x_pos               := vga.io.x_pos
-  io.vga_y_pos               := vga.io.y_pos
+  vga.io.pixClock    := io.vga_pixclk
+  io.vga_hsync       := vga.io.hsync
+  io.vga_vsync       := vga.io.vsync
+  io.vga_rrggbb      := vga.io.rrggbb
+  io.vga_activevideo := vga.io.activevideo
+  io.vga_x_pos       := vga.io.x_pos
+  io.vga_y_pos       := vga.io.y_pos
 
   // VGA MMIO routing
   vga.io.bundle.address      := cpu.io.memory_bundle.address

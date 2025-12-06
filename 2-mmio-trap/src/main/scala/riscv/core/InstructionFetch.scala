@@ -66,9 +66,13 @@ class InstructionFetch extends Module {
     // - Inner multiplexer: Check jump flag
     //   - True: Use jump target address
     //   - False: Sequential execution
-    pc := Mux(io.interrupt_assert, io.interrupt_handler_address,
+    pc := Mux(
+      io.interrupt_assert,
+      io.interrupt_handler_address,
       // Inner Mux: Check jump/branch (Second Priority)
-      Mux(io.jump_flag_id, io.jump_address_id,
+      Mux(
+        io.jump_flag_id,
+        io.jump_address_id,
         // False: Sequential execution (Default)
         pc + 4.U
       )

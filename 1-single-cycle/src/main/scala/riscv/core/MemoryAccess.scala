@@ -78,7 +78,7 @@ class MemoryAccess extends Module {
       Seq(
         // TODO: Complete LB (sign-extend byte)
         // Hint: Replicate sign bit, then concatenate with byte
-        InstructionsTypeL.lb  -> Cat(Fill(24, byte(7)), byte),
+        InstructionsTypeL.lb -> Cat(Fill(24, byte(7)), byte),
 
         // TODO: Complete LBU (zero-extend byte)
         // Hint: Fill upper bits with zero, then concatenate with byte
@@ -86,39 +86,39 @@ class MemoryAccess extends Module {
 
         // TODO: Complete LH (sign-extend halfword)
         // Hint: Replicate sign bit, then concatenate with halfword
-        InstructionsTypeL.lh  -> Cat(Fill(16, half(15)), half),
+        InstructionsTypeL.lh -> Cat(Fill(16, half(15)), half),
 
         // TODO: Complete LHU (zero-extend halfword)
         // Hint: Fill upper bits with zero, then concatenate with halfword
         InstructionsTypeL.lhu -> Cat(0.U(16.W), half),
 
         // LW: Load full word, no extension needed (completed example)
-        InstructionsTypeL.lw  -> data
+        InstructionsTypeL.lw -> data
       )
     )
-  // ============================================================
-  // [CA25: Exercise 7] Store Data Alignment - Byte Strobes and Shifting
-  // ============================================================
-  // Hint: Implement proper data alignment and byte strobes for store operations
-  //
-  // RISC-V Store instruction types:
-  // - SB (Store Byte): Write 8-bit value to memory at byte-aligned address
-  // - SH (Store Halfword): Write 16-bit value to memory at halfword-aligned address
-  // - SW (Store Word): Write 32-bit value to memory at word-aligned address
-  //
-  // Key concepts:
-  // 1. Byte strobes: Control which bytes in a 32-bit word are written
-  //    - SB: 1 strobe active (at mem_address_index position)
-  //    - SH: 2 strobes active (based on address bit 1)
-  //    - SW: All 4 strobes active
-  // 2. Data shifting: Align data to correct byte position in 32-bit word
-  //    - mem_address_index (bits 1:0) indicates byte position
-  //    - Left shift by (mem_address_index * 8) bits for byte operations
-  //    - Left shift by 16 bits for upper halfword
-  //
-  // Examples:
-  // - SB to address 0x1002 (index=2): data[7:0] → byte 2, strobe[2]=1
-  // - SH to address 0x1002 (index=2): data[15:0] → bytes 2-3, strobes[2:3]=1
+    // ============================================================
+    // [CA25: Exercise 7] Store Data Alignment - Byte Strobes and Shifting
+    // ============================================================
+    // Hint: Implement proper data alignment and byte strobes for store operations
+    //
+    // RISC-V Store instruction types:
+    // - SB (Store Byte): Write 8-bit value to memory at byte-aligned address
+    // - SH (Store Halfword): Write 16-bit value to memory at halfword-aligned address
+    // - SW (Store Word): Write 32-bit value to memory at word-aligned address
+    //
+    // Key concepts:
+    // 1. Byte strobes: Control which bytes in a 32-bit word are written
+    //    - SB: 1 strobe active (at mem_address_index position)
+    //    - SH: 2 strobes active (based on address bit 1)
+    //    - SW: All 4 strobes active
+    // 2. Data shifting: Align data to correct byte position in 32-bit word
+    //    - mem_address_index (bits 1:0) indicates byte position
+    //    - Left shift by (mem_address_index * 8) bits for byte operations
+    //    - Left shift by 16 bits for upper halfword
+    //
+    // Examples:
+    // - SB to address 0x1002 (index=2): data[7:0] → byte 2, strobe[2]=1
+    // - SH to address 0x1002 (index=2): data[15:0] → bytes 2-3, strobes[2:3]=1
   }.elsewhen(io.memory_write_enable) {
     io.memory_bundle.write_enable := true.B
     io.memory_bundle.address      := io.alu_result
@@ -138,7 +138,7 @@ class MemoryAccess extends Module {
         // 1. Enable single byte strobe at appropriate position
         // 2. Shift byte data to correct position based on address
         writeStrobes(mem_address_index) := true.B
-        writeData := data(7, 0) << (mem_address_index << 3)
+        writeData                       := data(7, 0) << (mem_address_index << 3)
       }
       is(InstructionsTypeS.sh) {
         // TODO: Complete store halfword logic
@@ -148,13 +148,13 @@ class MemoryAccess extends Module {
           // TODO: Enable strobes for lower two bytes, no shifting needed
           writeStrobes(0) := true.B
           writeStrobes(1) := true.B
-          writeData := data(15, 0)
+          writeData       := data(15, 0)
         }.otherwise {
           // Upper halfword (bytes 2-3)
           // TODO: Enable strobes for upper two bytes, apply appropriate shift
           writeStrobes(2) := true.B
           writeStrobes(3) := true.B
-          writeData := data(15, 0) << 16
+          writeData       := data(15, 0) << 16
         }
       }
       is(InstructionsTypeS.sw) {

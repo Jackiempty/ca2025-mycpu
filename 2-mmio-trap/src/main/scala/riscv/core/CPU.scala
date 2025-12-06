@@ -118,9 +118,9 @@ class CPU extends Module {
     0.U(Parameters.SlaveDeviceCountBits.W),
     mem.io.memory_bundle.address(Parameters.AddrBits - 1 - Parameters.SlaveDeviceCountBits, 0)
   )
-  io.memory_bundle.write_enable := mem.io.memory_bundle.write_enable
-  io.memory_bundle.write_data   := mem.io.memory_bundle.write_data
-  io.memory_bundle.write_strobe := mem.io.memory_bundle.write_strobe
+  io.memory_bundle.write_enable  := mem.io.memory_bundle.write_enable
+  io.memory_bundle.write_data    := mem.io.memory_bundle.write_data
+  io.memory_bundle.write_strobe  := mem.io.memory_bundle.write_strobe
   mem.io.memory_bundle.read_data := io.memory_bundle.read_data
 
   wb.io.instruction_address := inst_fetch.io.instruction_address

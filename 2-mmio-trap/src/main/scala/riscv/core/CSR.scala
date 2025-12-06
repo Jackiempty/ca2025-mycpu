@@ -135,8 +135,8 @@ class CSR extends Module {
 
       // 64-bit cycle counter split into high and low 32 bits
       // TODO: Extract low 32 bits and high 32 bits from cycles
-      CSRRegister.CycleL   -> cycles(31, 0),
-      CSRRegister.CycleH   -> cycles(63, 32),
+      CSRRegister.CycleL -> cycles(31, 0),
+      CSRRegister.CycleH -> cycles(63, 32),
     )
   cycles := cycles + 1.U
 
@@ -169,8 +169,8 @@ class CSR extends Module {
     // Atomic update when CLINT triggers interrupt
     // TODO: Which CSRs does CLINT need to write?
     mstatus := io.clint_access_bundle.mstatus_write_data
-    mepc := io.clint_access_bundle.mepc_write_data
-    mcause := io.clint_access_bundle.mcause_write_data
+    mepc    := io.clint_access_bundle.mepc_write_data
+    mcause  := io.clint_access_bundle.mcause_write_data
   }.elsewhen(io.reg_write_enable_id) {
     // CPU CSR instruction write
     // TODO: Update corresponding CSR based on write address
